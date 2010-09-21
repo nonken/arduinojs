@@ -1,0 +1,1 @@
+../../../../deps/node-arduino/lib/provider/socket.js

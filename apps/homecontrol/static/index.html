@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Home automation</title>
+		<meta name="viewport" content="user-scalable=no,width=device-width" />
+		<style type="text/css">
+			body {
+				-webkit-user-select: none;
+			}
+		</style>
+
+		<script src="http://192.168.1.15:8080/socket.io/socket.io.js"></script>
+		<script src="js/socket.js"></script>
+		<script src="js/arduino.js"></script>
+
+		<script src="js/raphael.js"></script>
+	</head>
+	<body>
+		<div id="controls"></div>
+		<script type="text/javascript">
+			var paper = Raphael('controls', 800, 312, 0, 0);
+
+			var button = function(x, y, text, callbOn, callbOff){
+				var c = paper.rect(x, y, 50, 50).
+						attr("fill", "#f5e922").
+						attr("stroke", "#030301").
+						attr("stroke-width", "1px"),
+					t = paper.text(x+25, y+25, text).
+						attr("font-size", "18px").
+						attr("fill", "#204f24"),
+					on = false
+				;
+
+				paper.set([c,t]).
+					drag(null, function(){
+						if (on){
+							c.attr("fill", "#f5e922");
+							callbOff && callbOff();
+						}else{
+							c.attr("fill", "#faf5bf");
+							callbOn && callbOn();
+						}
+						on = !on;
+					}, function(){
+
+					})
+				;
+			};
+
+			var pushButton = function(x, y, text, callbOn, callbOff){
+				var c = paper.circle(x+25, y+25, 25, 25).
+						attr("fill", "#d50f0f").
+						attr("stroke", "#250202").
+						attr("stroke-width", "1px"),
+					t = paper.text(x+25, y+25, text).
+						attr("font-size", "18px").
+						attr("fill", "#ffffff")
+				;
+
+				paper.set([c,t]).
+					drag(null, function(){
+						c.attr("fill", "#f39797");
+						callbOn && callbOn();
+					}, function(){
+						c.attr("fill", "#d50f0f");
+						callbOff && callbOff();
+					})
+				;
+			};
+
+			var group = function(x, y, w, h){
+				var c = paper.rect(x, y, w, h, 6).
+					attr("fill", "#ccc").
+					attr("stroke", "#333333").
+					attr("stroke-width", "1px")
+				;
+			}
+
+			board = arduino.connect();
+
+			new group(0, 5, 270, 60);
+			new button(5, 10, "1",
+				function(){
+					board.digitalWrite(13, arduino.HIGH);
+				},
+				function(){
+					board.digitalWrite(13, arduino.LOW);
+				})
+			;
+
+			new button(75, 10, "2");
+			new button(145, 10, "3");
+			new button(215, 10, "4");
+
+			new group(0, 75, 270, 60);
+
+			new pushButton(5, 80, "1",
+				function(){
+					board.digitalWrite(13, arduino.HIGH);
+				},
+				function(){
+					board.digitalWrite(13, arduino.LOW);
+				}
+			);
+
+			new pushButton(75, 80, "2");
+			new pushButton(145, 80, "3");
+			new pushButton(215, 80, "4");
+		</script>
+	</body>
+</html>

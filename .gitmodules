@@ -1,0 +1,9 @@
+[submodule "deps/node-arduino"]
+	path = deps/node-arduino
+	url = git@github.com:nonken/node-arduino.git
+[submodule "deps/socket.io"]
+	path = deps/socket.io
+	url = git://github.com/LearnBoost/Socket.IO-node.git
+[submodule "deps/raphael"]
+	path = deps/raphael
+	url = http://github.com/DmitryBaranovskiy/raphael.git
