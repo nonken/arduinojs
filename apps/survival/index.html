@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Survival</title>
+		<style type="text/css">
+			.display-none {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="text" id="socketSrc" value="http://localhost:8080" />
+		<button class="display-none" id="start" onclick="foo();">Start</button>
+		<script src="js/provider/socket.js"></script>
+		<script src="js/arduino.js"></script>
+		<script type="text/javascript">
+			var socketSrc = document.getElementById('socketSrc').value;
+
+			// Create script to dynamically load socket library
+			var script = document.createElement('script');
+			script.src = socketSrc + '/socket.io/socket.io.js';
+			document.getElementsByTagName('head')[0].appendChild(script);
+
+			script.onload = function(){
+				document.getElementById('start').className = '';
+			};
+
+			function foo(){
+				board = arduino.connect();
+
+				interval([
+					{ duration: 500, value: arduino.HIGH },
+					{ duration: 1500, value: arduino.LOW },
+					{ duration: 500, value: arduino.HIGH },
+					{ duration: 1500, value: arduino.LOW },
+					{ duration: 500, value: arduino.HIGH },
+					{ duration: 1500, value: arduino.LOW },
+					{ duration: 500, value: arduino.HIGH },
+					{ duration: 1500, value: arduino.LOW },
+					{ duration: 500, value: arduino.HIGH },
+					{ duration: 1500, value: arduino.LOW }
+				]);
+			}
+
+			function interval(arr){
+				if (!arr.length){
+					return;
+				}
+
+				var item = arr.shift();
+				var timeout = setTimeout(function(){
+					clearTimeout(timeout);
+					board.digitalWrite(13, item.value);
+					interval(arr);
+				}, item.duration)
+			}
+
+
+
+		</script>
+	</body>
+</html>

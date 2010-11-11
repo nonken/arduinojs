@@ -25,7 +25,8 @@
 			}
 		</style>
 
-		<script src="http://192.168.1.15:8080/socket.io/socket.io.js"></script>
+		<!--<script src="http://localhost:8080/socket.io/socket.io.js"></script>-->
+		<script src="http://10.0.2.1:8080/socket.io/socket.io.js"></script>
 		<script src="js/socket.js"></script>
 		<script src="js/arduino.js"></script>
 
@@ -92,9 +93,11 @@
 				;
 			}
 
+			// Connecting to the Arduino interface
 			board = arduino.connect();
 
-			new group(0, 5, 270, 60);
+			// Setting up awesome buttons
+			new group(0, 5, 60, 60);
 			new button(5, 10, "1",
 				function(){
 					board.digitalWrite(13, arduino.HIGH);
@@ -104,11 +107,7 @@
 				})
 			;
 
-			new button(75, 10, "2");
-			new button(145, 10, "3");
-			new button(215, 10, "4");
-
-			new group(0, 75, 270, 60);
+			new group(0, 75, 60, 60);
 
 			new pushButton(5, 80, "1",
 				function(){
@@ -118,10 +117,6 @@
 					board.digitalWrite(13, arduino.LOW);
 				}
 			);
-
-			new pushButton(75, 80, "2");
-			new pushButton(145, 80, "3");
-			new pushButton(215, 80, "4");
 		</script>
 	</body>
 </html>

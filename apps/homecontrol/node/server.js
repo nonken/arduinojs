@@ -1,12 +1,12 @@
 var http = require('http'),
-		url = require('url'),
-		fs = require('fs'),
-		io = require('../../../deps/socket.io'),
-		sys = require('sys')
-		arduinoProvider = require('../../../deps/node-arduino/lib/provider/serial'),
-		arduino = require('../../../deps/node-arduino/lib/arduino'),
-		board = arduino.connect('/dev/cu.usbserial-A9007OGm')
-	;
+	url = require('url'),
+	fs = require('fs'),
+	io = require('../../../deps/socket.io'),
+	sys = require('sys')
+	arduinoProvider = require('../../../deps/node-arduino/lib/provider/serial'),
+	arduino = require('../../../deps/node-arduino/lib/arduino'),
+	board = arduino.connect('/dev/cu.usbserial-A9007OGm')
+;
 
 server = http.createServer();
 server.listen(8080);
@@ -39,6 +39,7 @@ const OPC_DIGITAL_WRITE    = 0x03;
 const OPC_ANALOG_REFERENCE = 0x04;
 const OPC_ANALOG_READ      = 0x05;
 const OPC_ANALOG_WRITE     = 0x06;
+const OPC_SOUND            = 0x07;
 
 function handleMessage(msg){
 	if (!msg || !msg.control || !msg.control.length){
@@ -64,6 +65,8 @@ function handleMessage(msg){
 		case OPC_ANALOG_WRITE:
 			board.analogWrite(msg.control[1], msg.control[2]);
 			break;
-
+		case OPC_SOUND:
+			board.sound(msg.control[1], msg.control[2]);
+			break;
 	}
 }

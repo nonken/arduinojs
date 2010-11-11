@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SOS</title>
+		<style type="text/css">
+			.display-none {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="text" id="host" value="http://10.0.2.1:8080" />
+		<button id="config" class="display-none" onclick="start();">RUN</button>
+		<script type="text/javascript" src="js/provider/socket.js"></script>
+		<script type="text/javascript" src="js/arduino.js"></script>
+		<script type="text/javascript">
+			var script = document.createElement('script');
+			script.src = document.getElementById('host').value + '/socket.io/socket.io.js';
+			console.log(document.getElementById('host').value + '/socket.io/socket.io.js');
+			script.onload = function(){
+				document.getElementById('config').className = '';
+			}
+			document.getElementsByTagName('head')[0].appendChild(script);
+
+			function start(){
+				board = arduino.connect();
+
+				var trigger = function(arr){
+					if (!arr.length){
+						return;
+					}
+
+					var item = arr.shift();
+
+					var intv = setTimeout(function(){
+						clearTimeout(intv);
+						board.digitalWrite(13, item.value);
+						trigger(arr);
+					}, item.duration);
+				}
+
+				trigger(patterns);
+			}
+
+			var patterns = [
+				{ duration: 1000, value: arduino.HIGH },
+				{ duration: 1000, value: arduino.LOW },
+				{ duration: 1000, value: arduino.HIGH },
+				{ duration: 1000, value: arduino.LOW },
+				{ duration: 1000, value: arduino.HIGH },
+				{ duration: 1000, value: arduino.LOW },
+
+				{ duration: 500, value: arduino.HIGH },
+				{ duration: 500, value: arduino.LOW },
+				{ duration: 500, value: arduino.HIGH },
+				{ duration: 500, value: arduino.LOW },
+				{ duration: 500, value: arduino.HIGH },
+				{ duration: 500, value: arduino.LOW },
+
+				{ duration: 1000, value: arduino.HIGH },
+				{ duration: 1000, value: arduino.LOW },
+				{ duration: 1000, value: arduino.HIGH },
+				{ duration: 1000, value: arduino.LOW },
+				{ duration: 1000, value: arduino.HIGH },
+				{ duration: 1000, value: arduino.LOW }
+			]
+
+		</script>
+	</body>
+</html>
